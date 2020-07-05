@@ -7,15 +7,24 @@ from password_entropy.character_pool import strict_pool_of_unique_characters
 from password_entropy.exceptions import UnacceptableCharacters, ClassificationError
 
 
-def calculate_number_of_possible_passwords(
-        password: str, method: str = "normal", character_pool: CharacterPool = None
-):
+def calculate_number_of_possible_passwords(password: str,
+                                           method: str = "normal",
+                                           character_pool: CharacterPool = None):
     """
+    Calculate the number of possible passwords according to the formula:
+    size of pool of characters (int) ^ number of characters in password (int)
 
-    :param password:
-    :param method:
-    :param character_pool:
-    :return:
+    :param password: the password
+    :type: str
+
+    :param method: method to calculate the pool of characters
+    :type: str ("strict", "normal" or "lenient")
+
+    :param character_pool: pool of characters to use
+    :type: CharacterPool
+
+    :return: Number Of Possible Passwords
+    :type: int
     """
     if character_pool is None:
         pool = CharacterPool()
@@ -36,15 +45,24 @@ def calculate_number_of_possible_passwords(
     return pool_of_characters ** len(password)
 
 
-def calculate_entropy(
-        password: str, method: str = "normal", character_pool: CharacterPool = None
-):
+def calculate_entropy(password: str,
+                      method: str = "normal",
+                      character_pool: CharacterPool = None):
     """
+    Calculate the entropy of a password according to the formula:
+    log base 2 (number of possible passwords)
 
-    :param password:
-    :param method:
-    :param character_pool:
-    :return:
+    :param password: the password
+    :type: str
+
+    :param method: method to calculate the pool of characters
+    :type: str ("strict", "normal" or "lenient")
+
+    :param character_pool: pool of characters to use
+    :type: CharacterPool
+
+    :return: Entropy of password
+    :type: float
     """
     if character_pool is None:
         pool = CharacterPool()
@@ -73,10 +91,10 @@ class EntropyRange:
                 end, (int, float)
             ), "end range value must be a number (int or float)"
             assert (
-                    beginning <= end
+                beginning <= end
             ), "end value must be greater than or equal to the beginning value"
         else:
-            end = float('inf')
+            end = float("inf")
         self.beginning = beginning
         self.end = end
         self.beginning_end = self.beginning, self.end
@@ -94,6 +112,9 @@ class EntropyRange:
     def __repr__(self):
         return f"EntropyRange({self.beginning}, {self.end})"
 
+    def __eq__(self, other):
+        return type(self) == type(other) and self.beginning_end == other.beginning_end
+
 
 class Classifier:
     default_ranges = {
@@ -110,21 +131,24 @@ class Classifier:
         else:
             self.ranges = ranges
 
-    def validate_ranges(self):
-        ranges = sorted([i for j in self.ranges for i in j])
-        start, end = ranges.pop(0), ranges.pop(-1)
-        assert start == 0, "start must be 0"
-        assert end > start, "end must be greater than start"
-
-        for c, (i, j) in enumerate([r.to_tuple() for r in self.ranges]):
-            if c == 0:
-                assert i == 0, "start must be 0"
-            else:
-                pass
+    # def validate_ranges(self):
+    #     ranges = sorted([i for j in self.ranges for i in j])
+    #     start, end = ranges.pop(0), ranges.pop(-1)
+    #     assert start == 0, "start must be 0"
+    #     assert end > start, "end must be greater than start"
+    #
+    #     for c, (i, j) in enumerate([r.to_tuple() for r in self.ranges]):
+    #         if c == 0:
+    #             assert i == 0, "start must be 0"
+    #         else:
+    #             pass
 
     def classify(self, value):
         results = [k for k, v in self.ranges.items() if value in v]
-        if len(results) >= 0:
-            raise ClassificationError(f"value fits into {len(results)} provided entropy ranges. It should be 1.")
+        if len(results) != 1:
+            raise ClassificationError(
+                f"value fits into {len(results)} provided entropy ranges. "
+                f"It should be 1."
+            )
         else:
             return results.pop()
