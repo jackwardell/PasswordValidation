@@ -2,24 +2,27 @@ class CharacterPool:
     """
     The pool of characters to make a password from.
 
-    The default pool is ascii characters, taken from the string built-in
+    The default pool is ascii characters, it was taken from the string built-in
     library.
 
-    The character pool can work at the class level or the instance level.
-    Instantiating this class allows for overriding the default values.
+    defaults:
+    lowercase = abcdefghijklmnopqrstuvwxyz
+    uppercase = ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    numbers = 0123456789
+    symbols = !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~
+    whitespace =
+
+    other is a space where you can put other values if you wanted extra chars
+
+    This class can be passed different values if you wanted to use for, say,
+    another non-english alphabet.
+
+    :param lowercase: the lowercase characters
+    :type: str
+    :default: abcdefghijklmnopqrstuvwxyz
+
 
     """
-
-    # lowercase = set("abcdefghijklmnopqrstuvwxyz")
-    # uppercase = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-    # numbers = set("0123456789")
-    # symbols = set(r"""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~""")
-    # whitespace = set(" \t\n\r\v\f")
-    # other = set()
-    # letters = lowercase | uppercase
-    # alphanumeric = letters | numbers
-    # all = alphanumeric | symbols | whitespace | other
-
     def __init__(
         self,
         lowercase: str = "abcdefghijklmnopqrstuvwxyz",

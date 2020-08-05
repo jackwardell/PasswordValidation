@@ -5,11 +5,12 @@ from password_entropy.character_pool import lenient_pool_of_unique_characters
 from password_entropy.character_pool import normal_pool_of_unique_characters
 from password_entropy.character_pool import strict_pool_of_unique_characters
 from password_entropy.exceptions import UnacceptableCharacters, ClassificationError
+from typing import Union
 
 
-def calculate_number_of_possible_passwords(password: str,
-                                           method: str = "normal",
-                                           character_pool: CharacterPool = None):
+def calculate_number_of_possible_passwords(
+        password: str, method: str = "normal", character_pool: CharacterPool = None
+):
     """
     Calculate the number of possible passwords according to the formula:
     size of pool of characters (int) ^ number of characters in password (int)
@@ -26,11 +27,14 @@ def calculate_number_of_possible_passwords(password: str,
     :return: Number Of Possible Passwords
     :type: int
     """
+    # set default char pool if user doesn't pass one
     if character_pool is None:
         pool = CharacterPool()
+    # else set user char pool, should be init'd or have viable class methods
     else:
         pool = character_pool
 
+    # user can pick between strict, normal and lenient
     if method == "strict":
         pool_of_characters = strict_pool_of_unique_characters(password)
     elif method == "normal":
@@ -42,12 +46,13 @@ def calculate_number_of_possible_passwords(password: str,
     else:
         raise ValueError('method must be either "strict", "normal" or "lenient"')
 
+    # return pool of chars ^ len password
     return pool_of_characters ** len(password)
 
 
-def calculate_entropy(password: str,
-                      method: str = "normal",
-                      character_pool: CharacterPool = None):
+def calculate_entropy(
+        password: str, method: str = "normal", character_pool: CharacterPool = None
+):
     """
     Calculate the entropy of a password according to the formula:
     log base 2 (number of possible passwords)
@@ -64,11 +69,14 @@ def calculate_entropy(password: str,
     :return: Entropy of password
     :type: float
     """
+    # set default char pool if user doesn't pass one
     if character_pool is None:
         pool = CharacterPool()
+    # else set user char pool, should be init'd or have viable class methods
     else:
         pool = character_pool
 
+    # all chars must be in password char pool
     if not all(i in pool.all for i in password):
         raise UnacceptableCharacters(
             f"You can only use characters from the character pool, "
@@ -82,6 +90,39 @@ def calculate_entropy(password: str,
 
 
 class EntropyRange:
+    """
+    Essentially a range object, with fewer features.
+
+    Built-in range objects can't handle floats.
+
+    Aim of this class is to represent a range of values.
+        e.g. EntropyRange(0, 35) would be a range between 0 and 35.
+             inclusive of 35 but not of 0. This is slightly different behaviour
+             to built-in ranges.
+
+        therefore:
+            > 0 in EntropyRange(0, 35)
+            False
+            > 1 in EntropyRange(0, 35)
+            True
+            > 35 in EntropyRange(0, 35)
+            True
+
+        but also:
+            > 34.35 in EntropyRange(0, 35)
+            True
+
+        where as:
+            > 34.35 in range(0, 35)
+            False
+
+    :param beginning: beginning value of the range
+    :type: int
+
+    :param end: end value of the range
+    :type: int
+    """
+
     def __init__(self, beginning, end):
         assert isinstance(
             beginning, (int, float)
@@ -91,7 +132,7 @@ class EntropyRange:
                 end, (int, float)
             ), "end range value must be a number (int or float)"
             assert (
-                beginning <= end
+                    beginning <= end
             ), "end value must be greater than or equal to the beginning value"
         else:
             end = float("inf")
@@ -117,6 +158,25 @@ class EntropyRange:
 
 
 class Classifier:
+    """
+    A classifier for entropy.
+
+    Aim of this class is to classify a value (which in this instance is the
+    entropy).
+        e.g.
+        > classifier = Classifier()
+        > classifier.classify(56.554)
+        'Ok'
+
+    The class comes with default values for password classification (see below).
+    But they can be overridden by passing a dict of EntropyRanges in.
+
+    :param ranges: dict of range values
+                   e.g. {"Bad": EntropyRange(0,100),
+                         "Good": EntropyRange(100, 1000)}
+    :type: dict
+
+    """
     default_ranges = {
         "Very Weak": EntropyRange(0, 28),
         "Weak": EntropyRange(28, 35),
@@ -131,6 +191,7 @@ class Classifier:
         else:
             self.ranges = ranges
 
+    # todo: validate the ranges
     # def validate_ranges(self):
     #     ranges = sorted([i for j in self.ranges for i in j])
     #     start, end = ranges.pop(0), ranges.pop(-1)
@@ -143,7 +204,16 @@ class Classifier:
     #         else:
     #             pass
 
-    def classify(self, value):
+    def classify(self, value: Union[int, float]) -> str:
+        """
+        classify a value
+
+        :param value: a number
+        :type: int or float
+
+        :return: the classification
+        :type: str
+        """
         results = [k for k, v in self.ranges.items() if value in v]
         if len(results) != 1:
             raise ClassificationError(
