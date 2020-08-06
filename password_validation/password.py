@@ -1,5 +1,5 @@
-from password_entropy.calculate import calculate_entropy
-from password_entropy.character_pool import CharacterPool
+from password_validation.calculate import calculate_entropy
+from password_validation.character_pool import CharacterPool
 
 
 class Password:

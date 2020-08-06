@@ -1,4 +1,4 @@
-from password_entropy import PasswordPolicy
+from password_validation import PasswordPolicy
 
 
 def test_simple_case():

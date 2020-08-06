@@ -1,10 +1,10 @@
 import math
 
-from password_entropy.character_pool import CharacterPool
-from password_entropy.character_pool import lenient_pool_of_unique_characters
-from password_entropy.character_pool import normal_pool_of_unique_characters
-from password_entropy.character_pool import strict_pool_of_unique_characters
-from password_entropy.exceptions import UnacceptableCharacters, ClassificationError
+from password_validation.character_pool import CharacterPool
+from password_validation.character_pool import lenient_pool_of_unique_characters
+from password_validation.character_pool import normal_pool_of_unique_characters
+from password_validation.character_pool import strict_pool_of_unique_characters
+from password_validation.exceptions import UnacceptableCharacters, ClassificationError
 from typing import Union
 
 

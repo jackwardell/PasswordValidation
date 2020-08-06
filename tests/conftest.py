@@ -1,6 +1,6 @@
 import pytest
 
-from password_entropy.character_pool import CharacterPool
+from password_validation.character_pool import CharacterPool
 
 
 @pytest.fixture

@@ -1,10 +1,10 @@
 import types
 
-from password_entropy.funcs import FormatXY
-from password_entropy.funcs import greater_than_or_equal_to
-from password_entropy.funcs import less_than_or_equal_to
-from password_entropy.funcs import not_in
-from password_entropy.funcs import statement
+from password_validation.funcs import FormatXY
+from password_validation.funcs import greater_than_or_equal_to
+from password_validation.funcs import less_than_or_equal_to
+from password_validation.funcs import not_in
+from password_validation.funcs import statement
 
 
 def test_format_xy():

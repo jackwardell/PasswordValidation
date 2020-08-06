@@ -1,6 +1,6 @@
 import pytest
 
-from password_entropy.password import Password
+from password_validation.password import Password
 
 
 def test_password():

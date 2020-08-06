@@ -2,12 +2,12 @@ import operator
 import typing
 from typing import Any
 
-from password_entropy.character_pool import CharacterPool
-from password_entropy.funcs import greater_than_or_equal_to
-from password_entropy.funcs import less_than_or_equal_to
-from password_entropy.calculate import Classifier
-from password_entropy.funcs import not_in
-from password_entropy.password import Password
+from password_validation.character_pool import CharacterPool
+from password_validation.funcs import greater_than_or_equal_to
+from password_validation.funcs import less_than_or_equal_to
+from password_validation.calculate import Classifier
+from password_validation.funcs import not_in
+from password_validation.password import Password
 
 
 def _make_password(password):

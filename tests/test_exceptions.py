@@ -1,6 +1,6 @@
 import pytest
 
-from password_entropy.exceptions import UnacceptableCharacters, ClassificationError
+from password_validation.exceptions import UnacceptableCharacters, ClassificationError
 
 
 def test_unacceptable_characters():

@@ -1,12 +1,12 @@
 import pytest
 
-from password_entropy.character_pool import CharacterPool
-from password_entropy.funcs import greater_than_or_equal_to
-from password_entropy.funcs import less_than_or_equal_to
-from password_entropy.funcs import not_in
-from password_entropy.policy import MakePasswordRequirement
-from password_entropy.policy import PasswordPolicy
-from password_entropy.policy import PasswordRequirement
+from password_validation.character_pool import CharacterPool
+from password_validation.funcs import greater_than_or_equal_to
+from password_validation.funcs import less_than_or_equal_to
+from password_validation.funcs import not_in
+from password_validation.policy import MakePasswordRequirement
+from password_validation.policy import PasswordPolicy
+from password_validation.policy import PasswordRequirement
 
 
 def test_make_password_requirement():

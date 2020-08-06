@@ -2,10 +2,10 @@ import math
 
 import pytest
 
-from password_entropy.calculate import Classifier
-from password_entropy.calculate import EntropyRange
-from password_entropy.calculate import calculate_entropy
-from password_entropy.exceptions import UnacceptableCharacters, ClassificationError
+from password_validation.calculate import Classifier
+from password_validation.calculate import EntropyRange
+from password_validation.calculate import calculate_entropy
+from password_validation.exceptions import UnacceptableCharacters, ClassificationError
 
 
 def test_calculate_entropy_strict():
