@@ -82,7 +82,7 @@ class PasswordPolicy:
                              password
     :param min_length (int): the minimum length for a password
     :param max_length (int): the maximum length for a password
-    # :param forbidden_words
+    :param forbidden_words (list(str)): a list of forbidden words as strings
     :param character_pool (CharacterPool): the pool or characters to pick from
     """
 
@@ -96,7 +96,7 @@ class PasswordPolicy:
         other: int = 0,
         min_length: int = 12,
         max_length: int = 128,
-        entropy: typing.Union[int, float] = 32,
+        min_entropy: typing.Union[int, float] = 32,
         forbidden_words: list = None,
         character_pool: CharacterPool = None,
         requirement_cls: PasswordRequirement = None,
@@ -251,11 +251,11 @@ class PasswordPolicy:
             cls=requirement_cls,
         )
 
-        assert isinstance(entropy, (int, float)), "entropy must be an int or float"
-        assert 0 < entropy, "entropy must be greater than 0"
-        self.entropy = entropy
+        assert isinstance(min_entropy, (int, float)), "entropy must be an int or float"
+        assert 0 < min_entropy, "entropy must be greater than 0"
+        self.min_entropy = min_entropy
         self.entropy_requirement = MakePasswordRequirement(
-            "entropy", self.entropy, cls=requirement_cls
+            "entropy", self.min_entropy, cls=requirement_cls
         )
 
         self.forbidden_words = forbidden_words if forbidden_words else []
@@ -279,7 +279,7 @@ class PasswordPolicy:
             self.classifier = classifier
 
         # set a classification level from the entropy value
-        self.classification = self.classifier.classify(self.entropy)
+        self.classification = self.classifier.classify(self.min_entropy)
 
     def to_dict(self) -> dict:
         rv = {
@@ -291,7 +291,7 @@ class PasswordPolicy:
             "other": self.other,
             "min_length": self.min_length,
             "max_length": self.max_length,
-            "entropy": self.entropy,
+            "entropy": self.min_entropy,
             "forbidden_words": self.forbidden_words,
             "classification": self.classification,
             "character_pool": self.pool.to_dict(),
@@ -313,3 +313,6 @@ class PasswordPolicy:
             self.forbidden_words_requirements(password.password),
         ]
         return [i for i in validity if not i] if failures_only else validity
+
+    def validate(self, password):
+        return not bool(self.test_password(password))

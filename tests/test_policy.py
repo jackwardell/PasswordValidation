@@ -146,7 +146,7 @@ def test_password_policy():
     assert policy.other == 0
     assert policy.min_length == 12
     assert policy.max_length == 128
-    assert policy.entropy == 32
+    assert policy.min_entropy == 32
     assert policy.classification == "Weak"
     assert policy.forbidden_words == []
     assert policy.pool
