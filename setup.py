@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
     long_description = f.read()
 
 setup(
-    name="Password Entropy",
+    name="Password Validation",
     version="0.0.1",
     author="Jack Wardell",
     long_description=long_description,
