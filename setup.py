@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="Password Validation",
-    version="0.0.1",
+    version="0.1.1",
     author="Jack Wardell",
     description="A simple API to validate passwords according to basic guidelines",
     long_description=long_description,
