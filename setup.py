@@ -8,6 +8,7 @@ setup(
     name="Password Validation",
     version="0.0.1",
     author="Jack Wardell",
+    description="A simple API to validate passwords according to basic guidelines",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/jackwardell/PasswordValidation",
