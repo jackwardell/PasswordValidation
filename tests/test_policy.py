@@ -148,7 +148,7 @@ def test_password_policy():
     assert policy.max_length == 128
     assert policy.min_entropy == 32
     assert policy.classification == "Weak"
-    assert policy.forbidden_words == []
+    assert policy.forbidden_words == set()
     assert policy.pool
 
     assert policy.to_dict()
@@ -164,7 +164,7 @@ def test_password_policy():
         max_length=128,
         entropy=32,
         classification="Weak",
-        forbidden_words=[],
+        forbidden_words=set(),
         character_pool=CharacterPool().to_dict(),
     )
 

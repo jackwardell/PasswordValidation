@@ -82,7 +82,7 @@ class PasswordPolicy:
                              password
     :param min_length (int): the minimum length for a password
     :param max_length (int): the maximum length for a password
-    :param forbidden_words (list(str)): a list of forbidden words as strings
+    :param forbidden_words (list(str) / tuple(str) / set(str)): a sequence (but not str) of forbidden words as strings
     :param character_pool (CharacterPool): the pool or characters to pick from
     """
 
@@ -97,7 +97,7 @@ class PasswordPolicy:
         min_length: int = 12,
         max_length: int = 128,
         min_entropy: typing.Union[int, float] = 32,
-        forbidden_words: list = None,
+        forbidden_words: typing.Union[list, tuple, set] = tuple(),
         character_pool: CharacterPool = None,
         requirement_cls: PasswordRequirement = None,
         classifier: Classifier = None,
@@ -258,8 +258,8 @@ class PasswordPolicy:
             "entropy", self.min_entropy, cls=requirement_cls
         )
 
-        self.forbidden_words = forbidden_words if forbidden_words else []
-        assert isinstance(self.forbidden_words, list), "forbidden words must be a list"
+        assert isinstance(forbidden_words, (list, tuple, set)), "forbidden words must be a sequence of strings"
+        self.forbidden_words = set(forbidden_words)
         for word in self.forbidden_words:
             assert isinstance(word, str), "all forbidden words must be strings"
         self.forbidden_words_requirements = MakePasswordRequirement(
